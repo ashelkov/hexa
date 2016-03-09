@@ -1,9 +1,9 @@
 /* @flow */
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { increment, doubleAsync } from '../../redux/modules/counter'
+import { increment, doubleAsync } from 'redux/modules/counter'
 import DuckImage from './Duck.jpg'
-import classes from './HomeView.scss'
+import classes from './ExampleView.scss'
 
 // We can use Flow (http://flowtype.org/) to type our component's props
 // and state. For convenience we've included both regular propTypes and
@@ -21,7 +21,7 @@ type Props = {
 // We avoid using the `@connect` decorator on the class definition so
 // that we can export the undecorated component for testing.
 // See: http://rackt.github.io/redux/docs/recipes/WritingTests.html
-export class HomeView extends React.Component<void, Props, void> {
+export class ExampleView extends React.Component<void, Props, void> {
   static propTypes = {
     counter: PropTypes.number.isRequired,
     doubleAsync: PropTypes.func.isRequired,
@@ -62,4 +62,4 @@ const mapStateToProps = (state) => ({
 export default connect((mapStateToProps), {
   increment: () => increment(1),
   doubleAsync
-})(HomeView)
+})(ExampleView)
