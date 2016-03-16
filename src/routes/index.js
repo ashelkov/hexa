@@ -11,8 +11,8 @@ import ExampleView from 'views/ExampleView/ExampleView'
 import GameView from 'views/GameView/GameView'
 
 export default (store) => (
-  <Route component={CoreLayout}>
-    <Route path='/' component={GameView} />
+  <Route path='/'component={CoreLayout}>
+    <IndexRoute component={GameView} />
     <Route path='/counter' component={ExampleView} />
   </Route>
 )

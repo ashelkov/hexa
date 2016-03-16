@@ -1,21 +1,16 @@
 /* @flow */
 import React from 'react'
+// components
 import Navigation from 'containers/Navigation/Navigation'
+import GameMain from 'containers/GameMain/GameMain'
 
 export default class GameView extends React.Component {
   render () {
     return (
-      <div className='wrapper'>
+      <div>
         <Navigation />
-
         <div className='container'>
-          <h2>Welcome to Hexa!</h2>
-          <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            Alias asperiores, consequuntur eos eum eveniet explicabo ipsa labore mollitia nesciunt quia
-            repellat sit? Dolores doloribus ducimus laudantium quas, quibusdam rem tenetur?
-          </p>
-          <br/>
-          <div className='btn btn-primary'>Play Now!</div>
+          <GameMain />
         </div>
       </div>
     )
