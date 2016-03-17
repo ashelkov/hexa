@@ -2,7 +2,7 @@
 import React from 'react'
 // components
 import Navigation from 'containers/Navigation/Navigation'
-import GameMain from 'containers/GameMain/GameMain'
+import GameBoard from 'containers/GameBoard/GameBoard'
 
 export default class GameView extends React.Component {
   render () {
@@ -10,7 +10,7 @@ export default class GameView extends React.Component {
       <div>
         <Navigation />
         <div className='container'>
-          <GameMain />
+          <GameBoard />
         </div>
       </div>
     )
