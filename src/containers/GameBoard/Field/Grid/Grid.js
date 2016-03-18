@@ -31,32 +31,28 @@ export default class Grid extends React.Component {
 
   calculatePixelCoordinates = (baseVector, hexSize, axialXCoord, axialYCoord) => {
     return {
-      x: baseVector.x + (hexSize * Math.sqrt(3) * (axialXCoord + axialYCoord / 2)),
+      x: baseVector.x + (hexSize * Math.sqrt(3) * (axialXCoord + (axialYCoord % 2) / 2)),
       y: baseVector.y + (hexSize * 3 / 2 * axialYCoord)
     }
   }
 
   setupHexPositionsRadial = (widthPixels, heightPixels, countHorizontal, countVertical) => {
     const size = this.getOptimalSize(widthPixels, heightPixels, countHorizontal, countVertical)
-    const gridRadiusVertical = (countVertical - 1) / 2
-    const centreVector = {x: Math.floor(widthPixels / 2), y: Math.floor(heightPixels / 2)}
+    const baseVector = {x: Math.floor(size), y: Math.floor(size)}
     const hexSize = parseFloat(size)
-    const widthOffset = (countHorizontal - countVertical) / 2
 
     var rows = []
     _.times(countVertical, (indexVertical) => {
-      let axialYCoord = indexVertical - gridRadiusVertical
-      let distanceFromCentreVertical = Math.abs(axialYCoord)
-      let adjustedCountHorizontal = countHorizontal - distanceFromCentreVertical
+      let axialYCoord = indexVertical
+      let adjustedCountHorizontal = countHorizontal - (indexVertical % 2)
       let row = []
       _.times(adjustedCountHorizontal, (indexHorizontal) => {
-        let axialXCoord = indexHorizontal - Math.min(indexVertical, gridRadiusVertical) - widthOffset
+        let axialXCoord = indexHorizontal
         row.push({
           keyName: 'tile_' + axialXCoord + '_' + axialYCoord,
           axialCoordinates: {x: axialXCoord, y: axialYCoord},
-          cubeCoordinates: {x: axialXCoord, y: (-axialXCoord) - axialYCoord, z: axialYCoord},
           size: hexSize - 0.4,
-          pixelCoordinates: this.calculatePixelCoordinates(centreVector, hexSize, axialXCoord, axialYCoord)
+          pixelCoordinates: this.calculatePixelCoordinates(baseVector, hexSize, axialXCoord, axialYCoord)
         })
       })
       rows.push(row)

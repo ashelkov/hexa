@@ -9,13 +9,13 @@ import classnames from 'classnames/bind'
 let cx = classnames.bind(classes)
 export default class Field extends React.Component {
   render () {
-    const width = 750
+    const width = 735
     const height = 450
     return (
       <div className={cx('field-wrapper')}>
         <Surface width={width} height={height}>
           <Group>
-            <Grid width={width} height={height} hexCountHorizontal={40} hexCountVertical={31} />
+            <Grid width={width} height={height} hexCountHorizontal={50} hexCountVertical={35} />
           </Group>
         </Surface>
       </div>
