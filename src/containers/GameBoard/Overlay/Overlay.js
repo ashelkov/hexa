@@ -1,60 +1,41 @@
 import React from 'react'
+import { connect } from 'react-redux'
 // stylization
 import classes from './Overlay.scss'
 import classnames from 'classnames/bind'
+// actions
+import { startGame } from 'redux/modules/game'
 
 let cx = classnames.bind(classes)
 
+@connect(null, {startGame})
 export default class Overlay extends React.Component {
+  static propTypes = {
+    startGame: React.PropTypes.func.isRequired,
+    className: React.PropTypes.string
+  };
 
-  constructor (props) {
-    super(props)
-    this.state = {
-      selectedOption: ''
-    }
-  }
-
-  selectOption = (option) => (e) => {
-    if (option !== this.state.selectedOption) {
-      this.setState({selectedOption: option})
-    } else {
-      this.setState({selectedOption: ''})
-    }
+  startGame = () => {
+    const { startGame } = this.props
+    startGame()
   }
 
   render () {
-    const { selectedOption } = this.state
     return (
-      <div className={cx('overlay')}>
-        <div className={cx('buttons-menu')}>
-          <div className='btn btn-default btn-block' onClick={this.selectOption('single')}>
-            Play Offline
-          </div>
-          {selectedOption === 'single' &&
-            <div className={cx('submenu')}>
-              <div className='btn btn-success btn-block'>
-                Play vs Computer
-              </div>
-              <br/>
-              <div className='btn btn-success btn-block'>
-                Two Players (Hot Seat)
-              </div>
+      <div className={cx('overlay') + ' ' + this.props.className}>
+        <div className='well well-lg animated flipInY'>
+          <div className='buttons-menu '>
+            <div className='btn btn-success btn btn-block' onClick={this.startGame}>
+              Single Player
             </div>
-          }
-          <br/>
-          <div className='btn btn-primary btn-block' onClick={this.selectOption('multiplayer')}>
-            Multiplayer
-          </div>
-          {selectedOption === 'multiplayer' &&
-            <div className={cx('submenu')}>
-              <div className='btn btn-success btn-block'>
-                Play vs Friend
-              </div>
+            <div className='btn btn-primary btn btn-block' disabled>
+              Invite Friend
             </div>
-          }
-          <br/>
-          <br/>
+          </div>
         </div>
+
+        <br/>
+        <br/>
       </div>
     )
   }

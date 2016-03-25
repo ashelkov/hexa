@@ -23,12 +23,15 @@ export default class GameBoard extends React.Component {
 
   render () {
     const { palette, isStarted } = this.props
+    const showOverlay = !isStarted
     return (
       <div>
         <div className={cx('main')}>
-          <Field />
-          <ControlsPanel palette={palette} />
-          {!isStarted && <Overlay />}
+          {showOverlay && <Overlay className='animated fadeIn' />}
+          <div className={cx('inner', {'muted': showOverlay})}>
+            <Field />
+            <ControlsPanel palette={palette} />
+          </div>
         </div>
         <div className={cx('right')}>
           <RightPanel/>

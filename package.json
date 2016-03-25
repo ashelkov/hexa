@@ -64,6 +64,7 @@
   "author": "David Zukowski <david@zuko.me> (http://zuko.me)",
   "license": "MIT",
   "dependencies": {
+    "animate.css": "^3.5.1",
     "art": "^0.10.1",
     "babel-plugin-lodash": "^2.2.1",
     "classnames": "^2.2.3",

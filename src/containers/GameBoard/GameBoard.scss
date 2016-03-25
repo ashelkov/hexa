@@ -3,6 +3,14 @@
   margin-right: 20px;
   margin-bottom: 30px;
   position: relative;
+
+  .inner {
+    opacity: 1;
+    transition: opacity 0.5s;
+    &.muted {
+      opacity: 0.4;
+    }
+  }
 }
 
 .right {
