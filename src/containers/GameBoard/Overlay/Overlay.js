@@ -4,19 +4,21 @@ import { connect } from 'react-redux'
 import classes from './Overlay.scss'
 import classnames from 'classnames/bind'
 // actions
-import { startGame } from 'redux/modules/game'
+import { startGame, generateNewField } from 'redux/modules/game'
 
 let cx = classnames.bind(classes)
 
-@connect(null, {startGame})
+@connect(null, {startGame, generateNewField})
 export default class Overlay extends React.Component {
   static propTypes = {
     startGame: React.PropTypes.func.isRequired,
+    generateNewField: React.PropTypes.func.isRequired,
     className: React.PropTypes.string
   };
 
   startGame = () => {
-    const { startGame } = this.props
+    const { startGame, generateNewField } = this.props
+    generateNewField()
     startGame()
   }
 

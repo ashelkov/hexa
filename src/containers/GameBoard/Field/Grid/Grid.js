@@ -12,7 +12,9 @@ export default class Grid extends React.Component {
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
     hexCountHorizontal: PropTypes.number.isRequired,
-    hexCountVertical: PropTypes.number.isRequired
+    hexCountVertical: PropTypes.number.isRequired,
+    field: React.PropTypes.array,
+    palette: React.PropTypes.array
   };
 
   getOptimalSize = (widthPixels, heightPixels, countHorizontal, countVertical) => {
@@ -37,22 +39,25 @@ export default class Grid extends React.Component {
   }
 
   setupHexPositionsRadial = (widthPixels, heightPixels, countHorizontal, countVertical) => {
+    const { field, palette } = this.props
     const size = this.getOptimalSize(widthPixels, heightPixels, countHorizontal, countVertical)
     const baseVector = {x: Math.floor(size), y: Math.floor(size)}
     const hexSize = parseFloat(size)
 
-    var rows = []
+    const rows = []
     _.times(countVertical, (indexVertical) => {
       let axialYCoord = indexVertical
       let adjustedCountHorizontal = countHorizontal - (indexVertical % 2)
-      let row = []
+      const row = []
       _.times(adjustedCountHorizontal, (indexHorizontal) => {
         let axialXCoord = indexHorizontal
+        const color = field ? palette[field[axialYCoord][axialXCoord].colorIndex] : null
         row.push({
           keyName: 'tile_' + axialXCoord + '_' + axialYCoord,
           axialCoordinates: {x: axialXCoord, y: axialYCoord},
           size: hexSize - 0.4,
-          pixelCoordinates: this.calculatePixelCoordinates(baseVector, hexSize, axialXCoord, axialYCoord)
+          pixelCoordinates: this.calculatePixelCoordinates(baseVector, hexSize, axialXCoord, axialYCoord),
+          color: color
         })
       })
       rows.push(row)
@@ -63,11 +68,16 @@ export default class Grid extends React.Component {
   render () {
     const { width, height, hexCountHorizontal, hexCountVertical } = this.props
     const hexPositions = this.setupHexPositionsRadial(width, height, hexCountHorizontal, hexCountVertical)
-    const hexGrid = _.map(hexPositions, (hexRow, index) => {
+    const hexGrid = _.map(hexPositions, (hexRow, rowIndex) => {
       let rowElements = _.map(hexRow, (hexData) =>
-        <Hexagon key={hexData.keyName} size={hexData.size} centre={hexData.pixelCoordinates} />
+        <Hexagon
+          key={hexData.keyName}
+          size={hexData.size}
+          centre={hexData.pixelCoordinates}
+          color={hexData.color}
+        />
       )
-      return <Group key={'row_' + index}>{rowElements}</Group>
+      return <Group key={'row_' + rowIndex}>{rowElements}</Group>
     })
 
     return (

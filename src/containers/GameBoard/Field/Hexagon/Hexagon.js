@@ -5,7 +5,8 @@ import { Shape, Path } from 'react-art'
 export default class Hexagon extends React.Component {
   static propTypes = {
     size: PropTypes.number.isRequired,
-    centre: PropTypes.object.isRequired
+    centre: PropTypes.object.isRequired,
+    color: PropTypes.string
   };
 
   constructor (props) {
@@ -43,14 +44,15 @@ export default class Hexagon extends React.Component {
   }
 
   render () {
-    const { size, centre } = this.props
-    const color = this.state.isSelected ? '#888' : '#111'
+    const { size, centre, color } = this.props
+    const tileColor = color || '#111'
+    const opacity = this.state.isSelected ? 1 : 0.85
 
     // todo: this could be optimised, don't need to calculate coords for every hex, just one and then offset.
     const path = this.makeHexPath(size, centre)
 
     return (
-      <Shape d={path} fill={color} opacity='0.5' onClick={this.handleClick} />
+      <Shape d={path} fill={tileColor} opacity={opacity} onClick={this.handleClick} />
     )
   }
 }
