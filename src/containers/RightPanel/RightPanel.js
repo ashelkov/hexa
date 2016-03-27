@@ -2,8 +2,14 @@ import React from 'react'
 
 export default class RightPanel extends React.Component {
   render () {
+    const style = {
+      display: 'inline-block',
+      width: '375px',
+      verticalAlign: 'top',
+      marginLeft: '30px'
+    }
     return (
-      <div className='panel panel-default'>
+      <div className='panel panel-default' style={style}>
         <div className='panel-body'>
           <p>
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias atque aut autem cumque deserunt

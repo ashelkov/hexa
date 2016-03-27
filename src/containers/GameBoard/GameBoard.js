@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import Field from './Field/Field'
 import ControlsPanel from './ControlsPanel/ControlsPanel'
 import Overlay from './Overlay/Overlay'
-import RightPanel from '../RightPanel/RightPanel'
 // stylization
 import classes from './GameBoard.scss'
 import classnames from 'classnames/bind'
@@ -13,11 +12,13 @@ let cx = classnames.bind(classes)
 
 @connect((store) => ({
   palette: store.settings.palette,
+  windowSize: store.settings.windowSize,
   isStarted: store.game.isStarted
 }), null)
 export default class GameBoard extends React.Component {
   static propTypes = {
     palette: PropTypes.array.isRequired,
+    windowSize: PropTypes.object.isRequired,
     isStarted: PropTypes.bool.isRequired
   };
 
@@ -25,17 +26,12 @@ export default class GameBoard extends React.Component {
     const { palette, isStarted } = this.props
     const showOverlay = !isStarted
     return (
-      <div>
-        <div className={cx('main')}>
-          {showOverlay && <Overlay className='animated fadeIn' />}
-          <div className={cx('inner', {'muted': showOverlay})}>
-            <Field />
-            <ControlsPanel palette={palette} />
-          </div>
+      <div className={cx('board')}>
+        <div className={cx('inner', {'muted': showOverlay})}>
+          <Field />
+          <ControlsPanel palette={palette} />
         </div>
-        <div className={cx('right')}>
-          <RightPanel/>
-        </div>
+        {showOverlay && <Overlay className='animated fadeIn' />}
       </div>
     )
   }
