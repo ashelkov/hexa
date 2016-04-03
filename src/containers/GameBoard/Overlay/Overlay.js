@@ -4,30 +4,27 @@ import { connect } from 'react-redux'
 import classes from './Overlay.scss'
 import classnames from 'classnames/bind'
 // actions
-import { startGame, generateNewField } from 'redux/modules/game'
+import { startNewGame } from 'redux/modules/currentGame/currentGame'
 
 let cx = classnames.bind(classes)
 
-@connect(null, {startGame, generateNewField})
+@connect(null, {startNewGame})
 export default class Overlay extends React.Component {
   static propTypes = {
-    startGame: React.PropTypes.func.isRequired,
-    generateNewField: React.PropTypes.func.isRequired,
-    className: React.PropTypes.string
+    startNewGame: React.PropTypes.func.isRequired
   };
 
-  startGame = () => {
-    const { startGame, generateNewField } = this.props
-    generateNewField()
-    startGame()
+  startGame = (type) => (e) => {
+    const { startNewGame } = this.props
+    startNewGame({type})
   }
 
   render () {
     return (
-      <div className={cx('overlay') + ' ' + this.props.className}>
+      <div className={cx('overlay')}>
         <div className='well well-lg animated flipInY'>
           <div className='buttons-menu '>
-            <div className='btn btn-success btn btn-block' onClick={this.startGame}>
+            <div className='btn btn-success btn btn-block' onClick={this.startGame('vs_computer')}>
               Single Player
             </div>
             <div className='btn btn-primary btn btn-block' disabled>

@@ -1,5 +1,5 @@
 import { createAction, handleActions } from 'redux-actions'
-
+import { PALETTE } from 'redux/constants/const'
 // ------------------------------------
 // Constants
 // ------------------------------------
@@ -7,7 +7,7 @@ const SET_PALETTE = 'settings/SET_PALETTE'
 const WINDOW_RESIZE = 'settings/WINDOW_RESIZE'
 
 const initialState = {
-  palette: ['#F75C5C', '#5CF7F7', '#F75CF2', '#5CF761', '#EFF75C', '#645CF7', '#FF9F21'],
+  palette: PALETTE,
   windowSize: {
     width: window.innerWidth,
     height: window.innerHeight

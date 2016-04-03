@@ -13,7 +13,7 @@ export default class Grid extends React.Component {
     height: PropTypes.number.isRequired,
     hexCountHorizontal: PropTypes.number.isRequired,
     hexCountVertical: PropTypes.number.isRequired,
-    field: React.PropTypes.array,
+    currentField: React.PropTypes.array,
     palette: React.PropTypes.array
   };
 
@@ -38,8 +38,17 @@ export default class Grid extends React.Component {
     }
   }
 
+  getColor (X, Y) {
+    const { currentField, palette } = this.props
+    if (currentField) {
+      const colorIndex = currentField[Y][X].colorIndex
+      return currentField
+        ? palette[colorIndex]
+        : null
+    }
+  }
+
   setupHexPositionsRadial = (widthPixels, heightPixels, countHorizontal, countVertical) => {
-    const { field, palette } = this.props
     const size = this.getOptimalSize(widthPixels, heightPixels, countHorizontal, countVertical)
     const baseVector = {x: Math.floor(size), y: Math.floor(size)}
     const hexSize = parseFloat(size)
@@ -51,13 +60,12 @@ export default class Grid extends React.Component {
       const row = []
       _.times(adjustedCountHorizontal, (indexHorizontal) => {
         let axialXCoord = indexHorizontal
-        const color = field ? palette[field[axialYCoord][axialXCoord].colorIndex] : null
         row.push({
           keyName: 'tile_' + axialXCoord + '_' + axialYCoord,
           axialCoordinates: {x: axialXCoord, y: axialYCoord},
           size: hexSize - 0.4,
           pixelCoordinates: this.calculatePixelCoordinates(baseVector, hexSize, axialXCoord, axialYCoord),
-          color: color
+          color: this.getColor(axialXCoord, axialYCoord)
         })
       })
       rows.push(row)
@@ -75,6 +83,7 @@ export default class Grid extends React.Component {
           size={hexData.size}
           centre={hexData.pixelCoordinates}
           color={hexData.color}
+          _key={hexData.keyName}
         />
       )
       return <Group key={'row_' + rowIndex}>{rowElements}</Group>

@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux'
 import { routerReducer as router } from 'react-router-redux'
+import currentGame from './modules/currentGame/currentGame'
+import fieldGenerator from './modules/fieldGenerator'
 import settings from './modules/settings'
-import game from './modules/game'
 
 export default combineReducers({
-  game,
+  currentGame,
+  fieldGenerator,
   settings,
   router
 })

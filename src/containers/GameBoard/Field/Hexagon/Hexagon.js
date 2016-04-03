@@ -6,7 +6,8 @@ export default class Hexagon extends React.Component {
   static propTypes = {
     size: PropTypes.number.isRequired,
     centre: PropTypes.object.isRequired,
-    color: PropTypes.string
+    color: PropTypes.string,
+    _key: PropTypes.string
   };
 
   constructor (props) {
@@ -37,14 +38,15 @@ export default class Hexagon extends React.Component {
     return path
   }
 
-  handleClick = () => {
+  handleClick = (_key) => () => {
+    console.log(_key)
     this.setState({
       isSelected: !this.state.isSelected
     })
   }
 
   render () {
-    const { size, centre, color } = this.props
+    const { size, centre, color, _key } = this.props
     const tileColor = color || '#111'
     const opacity = this.state.isSelected ? 1 : 0.85
 
@@ -52,7 +54,7 @@ export default class Hexagon extends React.Component {
     const path = this.makeHexPath(size, centre)
 
     return (
-      <Shape d={path} fill={tileColor} opacity={opacity} onClick={this.handleClick} />
+      <Shape d={path} fill={tileColor} opacity={opacity} onClick={this.handleClick(_key)} />
     )
   }
 }

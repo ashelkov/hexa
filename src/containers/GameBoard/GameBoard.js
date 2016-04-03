@@ -13,7 +13,7 @@ let cx = classnames.bind(classes)
 @connect((store) => ({
   palette: store.settings.palette,
   windowSize: store.settings.windowSize,
-  isStarted: store.game.isStarted
+  isStarted: store.currentGame.isStarted
 }), null)
 export default class GameBoard extends React.Component {
   static propTypes = {
