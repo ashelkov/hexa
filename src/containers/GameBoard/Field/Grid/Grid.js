@@ -14,7 +14,9 @@ export default class Grid extends React.Component {
     hexCountHorizontal: PropTypes.number.isRequired,
     hexCountVertical: PropTypes.number.isRequired,
     currentField: React.PropTypes.array,
-    palette: React.PropTypes.array
+    players: React.PropTypes.array,
+    palette: React.PropTypes.array,
+    debugMode: React.PropTypes.bool
   };
 
   getOptimalSize = (widthPixels, heightPixels, countHorizontal, countVertical) => {
@@ -39,12 +41,24 @@ export default class Grid extends React.Component {
   }
 
   getColor (X, Y) {
-    const { currentField, palette } = this.props
+    const { currentField, palette, players, debugMode } = this.props
     if (currentField) {
-      const colorIndex = currentField[Y][X].colorIndex
-      return currentField
-        ? palette[colorIndex]
-        : null
+      const tileKey = `tile_${X}_${Y}`
+      if (_.includes(players[0].captured, tileKey)) {
+        return palette[players[0].color]
+      }
+      if (_.includes(players[1].captured, tileKey)) {
+        return palette[players[1].color]
+      }
+      if (debugMode) {
+        if (_.includes(players[0].borderline, tileKey)) {
+          return '#000'
+        }
+        if (_.includes(players[1].borderline, tileKey)) {
+          return '#000'
+        }
+      }
+      return palette[currentField[Y][X].colorIndex]
     }
   }
 

@@ -4,6 +4,7 @@ import { PALETTE } from 'redux/constants/const'
 // Constants
 // ------------------------------------
 const SET_PALETTE = 'settings/SET_PALETTE'
+const SET_DEBUG_MODE = 'settings/SET_DEBUG_MODE'
 const WINDOW_RESIZE = 'settings/WINDOW_RESIZE'
 
 const initialState = {
@@ -11,13 +12,15 @@ const initialState = {
   windowSize: {
     width: window.innerWidth,
     height: window.innerHeight
-  }
+  },
+  debugMode: false
 }
 
 // ------------------------------------
 // Actions
 // ------------------------------------
 export const setPalette = createAction(SET_PALETTE)
+export const setDebugMode = createAction(SET_DEBUG_MODE)
 export const windowResize = createAction(WINDOW_RESIZE)
 
 // ------------------------------------
@@ -25,6 +28,7 @@ export const windowResize = createAction(WINDOW_RESIZE)
 // ------------------------------------
 export const actions = {
   setPalette,
+  setDebugMode,
   windowResize
 }
 
@@ -39,5 +43,9 @@ export default handleActions({
   [WINDOW_RESIZE]: (state, action) => ({
     ...state,
     windowSize: action.payload
+  }),
+  [SET_DEBUG_MODE]: (state, action) => ({
+    ...state,
+    debugMode: action.payload
   })
 }, initialState)

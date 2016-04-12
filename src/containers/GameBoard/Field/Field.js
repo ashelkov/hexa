@@ -13,17 +13,21 @@ import classnames from 'classnames/bind'
 let cx = classnames.bind(classes)
 
 @connect((store) => ({
-  currentField: store.currentGame.field,
-  palette: store.settings.palette
+  currentField: store.currentGame.field.current,
+  players: store.currentGame.players,
+  palette: store.settings.palette,
+  debugMode: store.settings.debugMode
 }), null)
 export default class Field extends React.Component {
   static propTypes = {
     currentField: React.PropTypes.array,
-    palette: React.PropTypes.array
+    palette: React.PropTypes.array,
+    players: React.PropTypes.array,
+    debugMode: React.PropTypes.bool
   };
 
   render () {
-    const { currentField, palette } = this.props
+    const { currentField, players, palette, debugMode } = this.props
     const width = 735
     const height = 450
     return (
@@ -36,7 +40,9 @@ export default class Field extends React.Component {
               hexCountHorizontal={BOARD_SIZE.horizontal}
               hexCountVertical={BOARD_SIZE.vertical}
               currentField={currentField}
+              players={players}
               palette={palette}
+              debugMode={debugMode}
             />
           </Group>
         </Surface>

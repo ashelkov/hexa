@@ -3,6 +3,10 @@ import _ from 'lodash'
 // ------------------------------------
 // startNewGame
 // ------------------------------------
+export function initUnownedTiles (field) {
+  const unowned = _.map(_.flatten(field), 'label')
+  return _.difference(unowned, ['tile_0_34', 'tile_49_0'])
+}
 
 export function playersInitData (options) {
   const player1 = {
@@ -26,16 +30,42 @@ export function playersInitData (options) {
 // selectColor
 // ------------------------------------
 
-export function updatePlayerDataOnMove (playerData, currentField, selectedColor) {
-  const { captured, borderline } = playerData
+export function updateDataOnMove (playerData, currentField, selectedColor) {
+  let { captured, borderline } = playerData
+  let { current, unowned } = currentField
 
-  _.each(borderline, (tileKey) => {
-    const X = parseInt(tileKey.split('_')[1])
-    const Y = parseInt(tileKey.split('_')[2])
-    if (selectedColor === currentField[Y][X].colorIndex) {
-      captured.push(tileKey)
-    }
-  })
+  let newCaptured = []
+  let toInspect = [...borderline]
+  borderline = []
+
+  do {
+    console.log(toInspect)
+
+    // inspect borderline
+    newCaptured = []
+    _.each(toInspect, (tileKey) => {
+      const tileColor = getTileColor(tileKey, current)
+      if (tileColor === selectedColor) {
+        captured.push(tileKey)
+        newCaptured.push(tileKey)
+        _.pull(unowned, tileKey)
+      } else {
+        borderline.push(tileKey)
+      }
+    })
+
+    // update borderline
+    toInspect = []
+    _.each(newCaptured, (tileKey) => {
+      let nextTiles = getNearbyTiles(tileKey, current)
+      toInspect = [...toInspect, ...nextTiles]
+    })
+    toInspect = _.uniq(toInspect)
+    toInspect = _.intersection(toInspect, unowned)
+    toInspect = _.difference(toInspect, borderline)
+  } while (toInspect.length > 0)
+
+  // return updated data
   const updatedPlayerData = {
     ...playerData,
     captured: captured,
@@ -43,7 +73,10 @@ export function updatePlayerDataOnMove (playerData, currentField, selectedColor)
     score: captured.length,
     color: selectedColor
   }
-  return updatedPlayerData
+  return {
+    updatedPlayerData,
+    unowned
+  }
 }
 
 function getNearbyTiles (tileKey, field) {
@@ -68,4 +101,10 @@ function getNearbyTiles (tileKey, field) {
     }
   })
   return result
+}
+
+function getTileColor (tileKey, field) {
+  const X = parseInt(tileKey.split('_')[1])
+  const Y = parseInt(tileKey.split('_')[2])
+  return field[Y][X].colorIndex
 }

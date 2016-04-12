@@ -2,7 +2,7 @@ import { createAction, handleActions } from 'redux-actions'
 import update from 'react/lib/update'
 // actions
 import { generateNewField } from 'redux/modules/fieldGenerator'
-import { playersInitData, updatePlayerDataOnMove } from './currentGameHelper'
+import { playersInitData, updateDataOnMove, initUnownedTiles } from './currentGameHelper'
 
 // ------------------------------------
 // Constants
@@ -12,7 +12,9 @@ const SELECT_COLOR = 'game/SELECT_COLOR'
 
 const initialState = {
   isStarted: false,
-  field: null
+  field: {
+    current: null
+  }
 }
 
 const defaultGameOptions = {
@@ -33,7 +35,10 @@ export function startNewGame (options) {
     const action = createAction(START_NEW_GAME)
     dispatch(
       action({
-        field: field,
+        field: {
+          current: field,
+          unowned: initUnownedTiles(field)
+        },
         isStarted: true,
         gameOptions: {
           ...defaultGameOptions,
@@ -53,7 +58,7 @@ export function selectColor (playerIndex, colorIndex) {
     dispatch(
       action({
         playerIndex,
-        playerData: updatePlayerDataOnMove(playerData, field, colorIndex)
+        updatedData: updateDataOnMove(playerData, field, colorIndex)
       })
     )
   }
@@ -68,10 +73,13 @@ export default handleActions({
     ...action.payload
   }),
   [SELECT_COLOR]: (state, action) => {
-    const { playerIndex, playerData } = action.payload
+    const { playerIndex, updatedData } = action.payload
     return update(state, {
       players: {
-        [playerIndex]: {$set: playerData}
+        [playerIndex]: {$set: updatedData.updatedPlayerData}
+      },
+      field: {
+        unowned: {$set: updatedData.unowned}
       }
     })
   }
