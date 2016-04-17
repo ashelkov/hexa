@@ -8,20 +8,20 @@ export function initUnownedTiles (field) {
   return _.difference(unowned, ['tile_0_34', 'tile_49_0'])
 }
 
-export function playersInitData (options) {
+export function playersInitData (options, field) {
   const player1 = {
     type: 'human',
     captured: ['tile_0_34'],
     borderline: ['tile_0_33', 'tile_1_34'],
     score: 1,
-    color: null
+    color: field[34][0].colorIndex
   }
   const player2 = {
     type: 'computer',
     captured: ['tile_49_0'],
     borderline: ['tile_48_0', 'tile_48_1'],
     score: 1,
-    color: null
+    color: field[0][49].colorIndex
   }
   return [player1, player2]
 }
@@ -39,8 +39,6 @@ export function updateDataOnMove (playerData, currentField, selectedColor) {
   borderline = []
 
   do {
-    console.log(toInspect)
-
     // inspect borderline
     newCaptured = []
     _.each(toInspect, (tileKey) => {

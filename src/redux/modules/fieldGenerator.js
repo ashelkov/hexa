@@ -47,7 +47,8 @@ export function generateNewField () {
       })
       rows.push(row)
     })
-    dispatch(setGeneratedField(rows))
+    const field = normalizeField(rows)
+    dispatch(setGeneratedField(field))
     return rows
   }
 }
@@ -71,3 +72,26 @@ export default handleActions({
     options: action.payload
   })
 }, initialState)
+
+// ------------------------------------
+// Helpers
+// ------------------------------------
+function normalizeField (rows) {
+  // player1 (tile_0_34)
+  const indexes_p1 = _.difference(
+    [0, 1, 2, 3, 4, 5, 6],
+    [rows[33][0].colorIndex, rows[34][1].colorIndex]
+  )
+  const radnomIndex_p1 = Math.floor(Math.random() * 100) % indexes_p1.length
+  rows[34][0].colorIndex = indexes_p1[radnomIndex_p1]
+
+  // player2 (tile_49_0)
+  const indexes_p2 = _.difference(
+    [0, 1, 2, 3, 4, 5, 6],
+    [rows[0][48].colorIndex, rows[1][48].colorIndex, rows[34][0].colorIndex]
+  )
+  const radnomIndex_p2 = Math.floor(Math.random() * 100) % indexes_p2.length
+  rows[0][49].colorIndex = indexes_p2[radnomIndex_p2]
+
+  return rows
+}

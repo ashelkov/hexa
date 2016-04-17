@@ -14,7 +14,11 @@ const initialState = {
   isStarted: false,
   field: {
     current: null
-  }
+  },
+  players: [
+    {score: 0},
+    {score: 0}
+  ]
 }
 
 const defaultGameOptions = {
@@ -44,7 +48,7 @@ export function startNewGame (options) {
           ...defaultGameOptions,
           ...options
         },
-        players: playersInitData(options)
+        players: playersInitData(options, field)
       })
     )
   }
