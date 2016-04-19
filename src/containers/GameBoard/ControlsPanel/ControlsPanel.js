@@ -11,18 +11,22 @@ import classnames from 'classnames/bind'
 let cx = classnames.bind(classes)
 
 @connect(
-  (store) => ({players: store.currentGame.players}),
+  (store) => ({
+    players: store.currentGame.players,
+    activePlayer: store.currentGame.activePlayer
+  }),
   {selectColor}
 )
 export default class ControlsPanel extends React.Component {
   static propTypes = {
     palette: PropTypes.array.isRequired,
     selectColor: PropTypes.func.isRequired,
-    players: PropTypes.array
+    players: PropTypes.array.isRequired,
+    activePlayer: PropTypes.number
   };
 
   render () {
-    const { palette, selectColor, players } = this.props
+    const { palette, selectColor, players, activePlayer } = this.props
     return (
       <div className={cx('controls')}>
         <div className={cx('left')}>
@@ -30,6 +34,8 @@ export default class ControlsPanel extends React.Component {
             palette={palette}
             playerIndex={0}
             selectColor={selectColor}
+            players={players}
+            activePlayer={activePlayer}
           />
         </div>
         <div className={cx('center')}>
@@ -40,6 +46,8 @@ export default class ControlsPanel extends React.Component {
             palette={palette}
             playerIndex={1}
             selectColor={selectColor}
+            players={players}
+            activePlayer={activePlayer}
             style={{marginRight: '7px'}}
           />
         </div>

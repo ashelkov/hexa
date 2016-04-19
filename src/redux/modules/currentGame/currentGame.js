@@ -18,7 +18,8 @@ const initialState = {
   players: [
     {score: 0},
     {score: 0}
-  ]
+  ],
+  activePlayer: null
 }
 
 const defaultGameOptions = {
@@ -48,7 +49,8 @@ export function startNewGame (options) {
           ...defaultGameOptions,
           ...options
         },
-        players: playersInitData(options, field)
+        players: playersInitData(options, field),
+        activePlayer: 0
       })
     )
   }
@@ -84,7 +86,8 @@ export default handleActions({
       },
       field: {
         unowned: {$set: updatedData.unowned}
-      }
+      },
+      activePlayer: {$set: (state.activePlayer + 1) % 2}
     })
   }
 }, initialState)
