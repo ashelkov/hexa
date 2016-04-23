@@ -3,7 +3,7 @@ import _ from 'lodash'
 // ------------------------------------
 // startNewGame
 // ------------------------------------
-export function initUnownedTiles (field) {
+export function initUnowned (field) {
   const unowned = _.map(_.flatten(field), 'label')
   return _.difference(unowned, ['tile_0_34', 'tile_49_0'])
 }
@@ -29,13 +29,12 @@ export function playersInitData (options, field) {
 // ------------------------------------
 // selectColor
 // ------------------------------------
-
 export function updateDataOnMove (playerData, currentField, selectedColor) {
   let { captured, borderline } = playerData
   let { current, unowned } = currentField
 
   let newCaptured = []
-  let toInspect = [...borderline]
+  let toInspect = _.intersection(borderline, unowned)
   borderline = []
 
   do {
@@ -105,4 +104,16 @@ function getTileColor (tileKey, field) {
   const X = parseInt(tileKey.split('_')[1])
   const Y = parseInt(tileKey.split('_')[2])
   return field[Y][X].colorIndex
+}
+
+// ------------------------------------
+// getComputerMove
+// ------------------------------------
+export function getComputerMove (playerIndex, players) {
+  const availableColors = _.difference(
+    [0, 1, 2, 3, 4, 5, 6],
+    [players[0].color, players[1].color]
+  )
+  const randomIndex = Math.floor(Math.random() * 100) % availableColors.length
+  return availableColors[randomIndex]
 }
