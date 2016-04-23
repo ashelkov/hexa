@@ -25,10 +25,10 @@ export default class Overlay extends React.Component {
         <div className='well well-lg animated flipInY'>
           <div className='buttons-menu '>
             <div className='btn btn-success btn btn-block' onClick={this.startGame('vs_computer')}>
-              Single Player
+              Играть с Компьютером
             </div>
             <div className='btn btn-primary btn btn-block' disabled>
-              Invite Friend
+              Пригласить Друга
             </div>
           </div>
         </div>

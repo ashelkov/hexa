@@ -6,6 +6,8 @@ import _ from 'lodash'
 
 let cx = classnames.bind(classes)
 
+const clickFX = new Audio('/sfx/color_click.mp3')
+
 export default class Controls extends React.Component {
   static propTypes = {
     palette: PropTypes.array.isRequired,
@@ -18,7 +20,10 @@ export default class Controls extends React.Component {
 
   onColorClick = (playerIndex, colorIndex, preventAction) => (e) => {
     const { selectColor } = this.props
-    preventAction || selectColor(playerIndex, colorIndex)
+    if (!preventAction) {
+      selectColor(playerIndex, colorIndex)
+      clickFX.play()
+    }
   }
 
   render () {
@@ -27,6 +32,7 @@ export default class Controls extends React.Component {
     const inactive = activePlayer !== playerIndex
     return (
       <div className={cx('container', {'muted': inactive})} style={style}>
+        {inactive && <div className={cx('overlay')}></div>}
         {palette.map((color, index) =>
           <div key={index} className={cx('selection')}>
             <div className={cx('color', {'selected': _.includes(selectedColors, index)})}
@@ -35,9 +41,6 @@ export default class Controls extends React.Component {
             </div>
           </div>
         )}
-        {inactive &&
-          <div className={cx('overlay')}></div>
-        }
       </div>
     )
   }

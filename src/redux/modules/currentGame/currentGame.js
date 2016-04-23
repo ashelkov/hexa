@@ -2,13 +2,14 @@ import { createAction, handleActions } from 'redux-actions'
 import update from 'react/lib/update'
 // actions
 import { generateNewField } from 'redux/modules/fieldGenerator'
-import { playersInitData, updateDataOnMove, initUnownedTiles } from './currentGameHelper'
+import { playersInitData, updateDataOnMove, initUnowned, getComputerMove } from './currentGameHelper'
 
 // ------------------------------------
 // Constants
 // ------------------------------------
 const START_NEW_GAME = 'game/START_NEW_GAME'
 const SELECT_COLOR = 'game/SELECT_COLOR'
+const POSTMOVE_UPDATES = 'game/POSTMOVE_UPDATES'
 
 const initialState = {
   isStarted: false,
@@ -42,10 +43,10 @@ export function startNewGame (options) {
       action({
         field: {
           current: field,
-          unowned: initUnownedTiles(field)
+          unowned: initUnowned(field)
         },
         isStarted: true,
-        gameOptions: {
+        options: {
           ...defaultGameOptions,
           ...options
         },
@@ -58,15 +59,36 @@ export function startNewGame (options) {
 
 export function selectColor (playerIndex, colorIndex) {
   return (dispatch, getState) => {
-    const action = createAction(SELECT_COLOR)
+    const move = createAction(SELECT_COLOR)
     const playerData = getState().currentGame.players[playerIndex]
     const field = getState().currentGame.field
     dispatch(
-      action({
+      move({
         playerIndex,
         updatedData: updateDataOnMove(playerData, field, colorIndex)
       })
     )
+    dispatch(postMoveUpdates(playerIndex))
+  }
+}
+
+export function postMoveUpdates (playerIndex) {
+  return (dispatch, getState) => {
+    const postMove = createAction(POSTMOVE_UPDATES)
+    const players = getState().currentGame.players
+    const nextPlayerIndex = (playerIndex + 1) % 2
+    dispatch(
+      postMove({
+        activePlayer: nextPlayerIndex
+      })
+    )
+    // make computer move
+    if (players[nextPlayerIndex].type === 'computer') {
+      const nextColor = getComputerMove(nextPlayerIndex, players)
+      setTimeout(() => {
+        dispatch(selectColor(nextPlayerIndex, nextColor))
+      }, 500)
+    }
   }
 }
 
@@ -86,8 +108,11 @@ export default handleActions({
       },
       field: {
         unowned: {$set: updatedData.unowned}
-      },
-      activePlayer: {$set: (state.activePlayer + 1) % 2}
+      }
     })
-  }
+  },
+  [POSTMOVE_UPDATES]: (state, action) => ({
+    ...state,
+    ...action.payload
+  })
 }, initialState)
